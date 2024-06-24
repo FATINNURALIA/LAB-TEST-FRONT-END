@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+</head>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    /* Style the header */
+    header {
+      background-color:#dedfdb;
+      padding:5px;
+      text-align:center;
+      font-size:5px;
+      color: white;
+    }
+    
+    /* Style the footer */
+    footer {
+      background-color:#dedfdb;
+      padding: 10px;
+      text-align: center;
+      color: white;
+    }
+    }
+    </style>
+<body>
+    <header><h2>CSM3503</h2></header>
+        
+    <div class="container mt-5">
+        <h2>Staff Details</h2>
+        <div id="staffDetails" class="mt-3"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Extract id from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            // Ajax call to retrieve staff details by id
+            $.ajax({
+                url: `https://kerbau.odaje.biz/getstaffbyid.php?id=${id}`,
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.length > 1) {
+                        let staff = JSON.parse(data[1]);
+                        // Display staff details
+                        $('#staffDetails').append(`
+    <div class="card">
+        <div class="card-body">
+            <p class="card-text"><strong>Id:</strong> ${staff.employeeNumber}</p>
+            <p class="card-text"><strong>FirstName:</strong> ${staff.firstName}</p>
+            <p class="card-text"><strong>LastName:</strong>  ${staff.lastName}</p>
+            <p class="card-text"><strong>Office Code:</strong> ${staff.officeCode}</p>
+            <p class="card-text"><strong>Phone Extension:</strong> ${staff.extension}</p>
+            <p class="card-text"><strong>Email Address:</strong> ${staff.email}</p>
+            <p class="card-text"><strong>Job Title:</strong> ${staff.jobTitle}</p>
+            <p class="card-text"><strong>Reports To:</strong> ${staff.reportsTo || 'None'}</p>
+        </div>
+    </div>
+`);
+;
+                    } else {
+                        $('#staffDetails').append(`<p>No data found for employee number ${id}</p>`);
+                    }
+                },
+                error: function() {
+                    console.error("Failed to retrieve staff details.");
+                }
+            });
+        });
+    </script><br><br>
+    <footer>
+        <p>Front End Programming &copy2022</p>
+      </footer>
+      
+</body>
+</html>
